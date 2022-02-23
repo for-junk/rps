@@ -1,61 +1,73 @@
-const rps = ["Rock", "Paper", "Scissors"];
+const computerDisplay = document.getElementById("computer");
+const playerDisplay = document.getElementById("player");
+const scoreDisplay = document.getElementById("score");
+const winnerDisplay = document.getElementById("winner");
+const choices = document.querySelectorAll("button");
+const over = document.getElementById("go");
 const wins = [];
+let computerSelection;
+let playerSelection;
+let result;
+const rps = ["Rock", "Paper", "Scissors"];
+
+let container = document.querySelector("#buttons");
+let matches = container.querySelectorAll("button.rps");
+
+choices.forEach((choices) =>
+  choices.addEventListener("click", (e) => {
+    playerSelection = e.target.id;
+    playerDisplay.innerHTML = playerSelection;
+    computerPlay();
+    playRound();
+    wins.push(result);
+    score();
+  })
+);
+function score() {
+  pWins = wins.filter((item) => item == "Player wins").length;
+  cWins = wins.filter((item) => item == "Computer wins").length;
+  scoreDisplay.innerHTML = `${pWins}-${cWins}`;
+  if (pWins == 5) {
+    matches.forEach(function (match) {
+      match.parentNode.removeChild(match);
+    });
+    const newItem = document.createElement("h2");
+    newItem.innerHTML = "Game Over Player Wins";
+    container.parentNode.replaceChild(newItem, container);
+  }
+  if (cWins == 5) {
+    matches.forEach(function (match) {
+      match.parentNode.removeChild(match);
+    });
+    const newItem = document.createElement("h2");
+    newItem.innerHTML = "Game Over Computer Wins";
+    container.parentNode.replaceChild(newItem, container);
+  }
+}
 
 function computerPlay() {
-  return rps[Math.floor(Math.random() * rps.length)];
-}
-
-function capitalize(string) {
-  const cap = string.toLowerCase();
-  return cap.replace(cap[0], cap[0].toUpperCase());
-}
-
-function playerInput() {
-  let input = prompt("Rock, Paper or Scissors");
-  return capitalize(input);
+  computerSelection = rps[Math.floor(Math.random() * rps.length)];
+  computerDisplay.innerHTML = computerSelection;
 }
 
 function playRound() {
-  const playerSelection = playerInput();
-  const computerSelection = computerPlay();
-  console.log(playerSelection);
-  console.log(computerSelection);
-
   if (playerSelection == "Rock" && computerSelection == "Scissors") {
-    return "Player wins";
+    result = "Player wins";
   } else if (playerSelection == "Rock" && computerSelection == "Paper") {
-    return "Computer wins";
+    result = "Computer wins";
   } else if (playerSelection == "Rock" && computerSelection == "Rock") {
-    return "Draw";
+    result = "Draw";
   } else if (playerSelection == "Paper" && computerSelection == "Paper") {
-    return "Draw";
+    result = "Draw";
   } else if (playerSelection == "Paper" && computerSelection == "Rock") {
-    return "Player wins";
+    result = "Player wins";
   } else if (playerSelection == "Paper" && computerSelection == "Scissors") {
-    return "Computer wins";
+    result = "Computer wins";
   } else if (playerSelection == "Scissors" && computerSelection == "Paper") {
-    return "Player wins";
+    result = "Player wins";
   } else if (playerSelection == "Scissors" && computerSelection == "Rock") {
-    return "Computer wins";
+    result = "Computer wins";
   } else if (playerSelection == "Scissors" && computerSelection == "Scissors") {
-    return "Draw";
+    result = "Draw";
   }
 }
-
-function game() {
-  for (let i = 0; i <= 4; i++) {
-    console.log(" ");
-    console.log(`Round ${i + 1}`);
-    wins.push(playRound());
-    console.log(wins[i]);
-    score();
-  }
-}
-
-function score() {
-  let pWins = wins.filter((item) => item == "Player wins").length;
-  let cWins = wins.filter((item) => item == "Computer wins").length;
-  console.log(`Score: ${pWins}-${cWins}`);
-}
-
-game();
